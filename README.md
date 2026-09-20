@@ -1,11 +1,9 @@
-# Fold or Fail: Predicting Protein Stability Changes from Mutations
-Can graph neural networks learn what sequence alone cannot?
+# predicting protein stability changes from mutations
+This repository contains our final project for Machine Learning. We study whether graph neural networks (GNNs) on protein residue contact graphs improve prediction of mutation-induced protein stability changes, measured as ΔΔG, beyond more tabular baselines.
 
-This repository contains our Applied Machine Learning final project. We study whether graph neural networks (GNNs) on protein residue contact graphs improve prediction of mutation-induced protein stability changes, measured as ΔΔG, beyond tabular baselines.
+Our motivating question was if residue contact graphs add useful structural information for ΔΔG prediction beyond mutation-level and condition-aware flat features. 
 
-Our central motivating question was if residue contact graphs add useful structural information for ΔΔG prediction beyond mutation-level and condition-aware flat features. 
-
-## How to View the Final HTML Blog
+## how to view the final HTML blog, summarizing our findings 
 
 The final website is contained in:
 
@@ -26,34 +24,7 @@ cd path/to/aml-final-project
 open -a "Google Chrome" index.html
 ```
 
-The HTML site uses local files only. Figures are stored in `assets/figures/`, saved model outputs are stored in `results/`, and the interactive protein structure viewer uses a local copy of `3Dmol.js` stored in `assets/js/`. 
-
-## How to Reproduce the Blog Figures
-
-To regenerate the figures used in the blog, run:
-
-```text
-03_reproduce_blog_figures.ipynb
-```
-
-This notebook loads saved model outputs from the `results/` folder and regenerates the figures used in `index.html`. It does **not** require rerunning the full XGBoost or GNN training pipelines.
-
-The notebook reads from:
-
-```text
-single_point_mutations.tsv
-results/
-results/xgboost/
-assets/
-```
-
-and saves figure outputs to:
-
-```text
-assets/figures/
-```
-
-## Project Overview
+## project overview 
 
 A single amino acid mutation can stabilize or destabilize a protein. We model this as a supervised regression problem:
 
@@ -64,15 +35,15 @@ A single amino acid mutation can stabilize or destabilize a protein. We model th
 
 We compare two modeling approaches:
 
-1. **Tabular baselines**  
+1. **tabular baselines**  
    Models using mutation-level physicochemical features and experimental condition features.
 
-2. **Graph neural networks**  
+2. **graph neural networks**  
    Models trained on protein residue contact graphs, where nodes represent amino acids and edges represent sequence or structural contacts.
 
 Our original hypothesis was that residue contact graphs would improve protein-level ΔΔG prediction by giving the model access to spatial structural context. The final result is more nuanced: the strongest full-test model is a condition-aware HistGradientBoosting tabular model, while GNN ablations reveal where graph topology helps, especially for buried residues with dense contact neighborhoods.
 
-## Main Files
+## main files
 
 ### `index.html`
 
@@ -88,13 +59,13 @@ Trains and evaluates the final GNN variants and tabular baselines on the larger 
 
 ### `03_reproduce_blog_figures.ipynb`
 
-The main reproducibility notebook. It loads saved CSV/JSON outputs and regenerates the figures used in `index.html`.
+The main reproducibility notebook for submission. It loads saved CSV/JSON outputs and regenerates the figures used in `index.html`.
 
 ### `04_protein_visualization.ipynb`
 
 Generates local protein visualization assets, including the residue contact graph viewer and the side-by-side wild-type versus mutant protein structure viewer.
 
-## Repository Structure
+## repository structure
 
 ```text
 aml-final-project/
@@ -138,7 +109,7 @@ aml-final-project/
     └── pdb_files/
 ```
 
-## Python Requirements
+## python requirements
 
 The HTML blog itself does not require Python. It only requires opening `index.html` in Chrome.
 
@@ -148,7 +119,7 @@ To run the figure reproduction notebook:
 pip install numpy pandas matplotlib seaborn scipy scikit-learn
 ```
 
-## Model Variants
+## model variants
 
 The final GNN notebook evaluates four GNN variants:
 
@@ -159,33 +130,3 @@ The final GNN notebook evaluates four GNN variants:
 
 V4 is not strictly comparable with V1–V3 because it uses a smaller subset of examples with real structure-backed graphs.
 
-## Saved Outputs
-
-The final blog and figure reproduction notebook rely on saved outputs in:
-
-```text
-results/
-```
-
-and XGBoost-specific outputs in:
-
-```text
-results/xgboost/
-```
-
-These files allow the final figures to be regenerated without rerunning expensive model training.
-
-## Interactive Structure Viewers
-
-The website includes local interactive visualizations. This shows one protein example using embedded PDB coordinates. 
-
-```text
-assets/structure_viewer.html
-assets/structure_viewer_pair.html
-```
-
-These use a local vendored copy of:
-
-```text
-assets/js/3Dmol-min.js
-```
